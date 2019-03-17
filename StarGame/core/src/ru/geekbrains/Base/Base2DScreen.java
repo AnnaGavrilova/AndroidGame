@@ -33,7 +33,7 @@ public abstract class Base2DScreen implements Screen, InputProcessor {
         this.screenToWorld = new Matrix3();
         this.screenBounds = new Rect();
         this.worldBounds = new Rect();
-        this.glBounds = new Rect(0, 0, 50f, 50f);//
+        this.glBounds = new Rect(0, 0, 1f, 1f);
         this.touch = new Vector2();
     }
 
@@ -50,11 +50,12 @@ public abstract class Base2DScreen implements Screen, InputProcessor {
         screenBounds.setBottom(0);
 
         float aspect = width / (float) height;
-        worldBounds.setHeight(100f);//
-        worldBounds.setWidth(100f * aspect);//
+        worldBounds.setHeight(1f);
+        worldBounds.setWidth(1f * aspect);
         MatrixUtils.calcTransitionMatrix(worldToGl, worldBounds, glBounds);
         batch.setProjectionMatrix(worldToGl);
         MatrixUtils.calcTransitionMatrix(screenToWorld, screenBounds, worldBounds);
+        resize(worldBounds);
     }
 
     public void resize(Rect worldBounds) {

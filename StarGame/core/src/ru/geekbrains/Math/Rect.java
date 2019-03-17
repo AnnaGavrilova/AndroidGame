@@ -42,6 +42,7 @@ public class Rect {
     }
 
     public float getHalfWidth() {
+
         return halfWidth;
     }
 
@@ -76,6 +77,7 @@ public class Rect {
     }
 
     public void setBottom(float bottom) {
+
         pos.y = bottom + halfHeight;
     }
 

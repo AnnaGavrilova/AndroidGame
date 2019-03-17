@@ -11,7 +11,6 @@ public class MatrixUtils {
 
     private MatrixUtils() {
     }
-
     /**
      * Расчёт матрицы перехода 4x4
      * @param mat итоговая матрица преобразований
@@ -23,7 +22,6 @@ public class MatrixUtils {
         float scaleY = dst.getHeight() / src.getHeight();
         mat.idt().translate(dst.pos.x, dst.pos.y, 0f).scale(scaleX, scaleY, 1f).translate(-src.pos.x, -src.pos.y, 0f);
     }
-
     /**
      * Расчёт матрицы перехода 3x3
      * @param mat итоговая матрица преобразований

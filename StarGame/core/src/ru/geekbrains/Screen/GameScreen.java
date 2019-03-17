@@ -1,6 +1,5 @@
 package ru.geekbrains.Screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,41 +10,31 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.Base.Base2DScreen;
 import ru.geekbrains.Math.Rect;
 import ru.geekbrains.Sprite.Background;
-import ru.geekbrains.Sprite.ButtonExit;
-import ru.geekbrains.Sprite.ButtonPlay;
+import ru.geekbrains.Sprite.Spaceship;
 import ru.geekbrains.Sprite.Star;
 
-public class MenuScreen extends Base2DScreen {
+public class GameScreen extends Base2DScreen {
 
-    private static final int STAR_COUNT = 256;
-
-    private Game game;
-
+    private static final int STAR_COUNT = 60;
     private Background background;
-    private Texture backImg;
+    private Texture backgroundTexture;
     private TextureAtlas atlas;
-
+    private TextureAtlas atlasStar;
     private Star starList[];
-    private ButtonExit buttonExit;
-    private ButtonPlay buttonPlay;
-
-    public MenuScreen(Game game) {
-        this.game = game;
-    }
-
+    private Spaceship myShip;
 
     @Override
     public void show() {
         super.show();
-        backImg = new Texture("textures/bg.png");
-        background = new Background(new TextureRegion(backImg));
-        atlas = new TextureAtlas("textures/menuAtlas.tpack");
+        backgroundTexture = new Texture("starSky.jpg");
+        background = new Background(new TextureRegion(backgroundTexture));
+        atlas = new TextureAtlas("textures/mainAtlas.tpack");
+        atlasStar = new TextureAtlas("textures/menuAtlas.tpack");
         starList = new Star[STAR_COUNT];
         for (int i = 0; i < starList.length; i++) {
-            starList[i] = new Star(atlas);
+            starList[i] = new Star(atlasStar);
         }
-        buttonExit = new ButtonExit(atlas);
-        buttonPlay = new ButtonPlay(atlas, game);
+        myShip = new Spaceship(atlas);
     }
 
     @Override
@@ -55,8 +44,7 @@ public class MenuScreen extends Base2DScreen {
         for (Star star : starList) {
             star.resize(worldBounds);
         }
-        buttonExit.resize(worldBounds);
-        buttonPlay.resize(worldBounds);
+        myShip.resize(worldBounds);
     }
 
     @Override
@@ -80,30 +68,21 @@ public class MenuScreen extends Base2DScreen {
         for (Star star : starList) {
             star.draw(batch);
         }
-
-        buttonExit.draw(batch);
-        buttonPlay.draw(batch);
+        myShip.draw(batch);
         batch.end();
     }
 
     @Override
     public void dispose() {
-        backImg.dispose();
+        backgroundTexture.dispose();
         atlas.dispose();
+        atlasStar.dispose();
         super.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        buttonExit.touchDown(touch, pointer);
-        buttonPlay.touchDown(touch, pointer);
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(Vector2 touch, int pointer) {
-        buttonExit.touchUp(touch, pointer);
-        buttonPlay.touchUp(touch, pointer);
+        myShip.touchDown(touch, pointer);
         return false;
     }
 }
