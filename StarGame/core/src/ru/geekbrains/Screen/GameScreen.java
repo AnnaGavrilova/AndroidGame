@@ -1,17 +1,18 @@
-package ru.geekbrains.Screen;
+package ru.geekbrains.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.Base.Base2DScreen;
-import ru.geekbrains.Math.Rect;
-import ru.geekbrains.Sprite.Background;
-import ru.geekbrains.Sprite.Spaceship;
-import ru.geekbrains.Sprite.Star;
+import ru.geekbrains.base.Base2DScreen;
+import ru.geekbrains.math.Rect;
+import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.Spaceship;
+import ru.geekbrains.sprite.Star;
 
 public class GameScreen extends Base2DScreen {
 
@@ -21,11 +22,15 @@ public class GameScreen extends Base2DScreen {
     private TextureAtlas atlas;
     private TextureAtlas atlasStar;
     private Star starList[];
-    private Spaceship myShip;
+    private Spaceship myShip;//
+    private Music music;
 
     @Override
     public void show() {
         super.show();
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        music.setLooping(true);
+        music.play();
         backgroundTexture = new Texture("starSky.jpg");
         background = new Background(new TextureRegion(backgroundTexture));
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
@@ -34,7 +39,7 @@ public class GameScreen extends Base2DScreen {
         for (int i = 0; i < starList.length; i++) {
             starList[i] = new Star(atlasStar);
         }
-        myShip = new Spaceship(atlas);
+        myShip = new Spaceship(atlas);//
     }
 
     @Override
@@ -58,6 +63,7 @@ public class GameScreen extends Base2DScreen {
         for (Star star : starList) {
             star.update(delta);
         }
+        myShip.update(delta);//new
     }
 
     private void draw() {
@@ -68,7 +74,7 @@ public class GameScreen extends Base2DScreen {
         for (Star star : starList) {
             star.draw(batch);
         }
-        myShip.draw(batch);
+        myShip.draw(batch);//
         batch.end();
     }
 
@@ -78,11 +84,30 @@ public class GameScreen extends Base2DScreen {
         atlas.dispose();
         atlasStar.dispose();
         super.dispose();
+        music.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        myShip.keyDown(keycode);
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        myShip.keyUp(keycode);
+        return false;
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
         myShip.touchDown(touch, pointer);
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        myShip.touchUp(touch, pointer);
         return false;
     }
 }

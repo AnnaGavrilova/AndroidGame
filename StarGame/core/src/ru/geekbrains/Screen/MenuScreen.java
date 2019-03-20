@@ -1,19 +1,20 @@
-package ru.geekbrains.Screen;
+package ru.geekbrains.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.Base.Base2DScreen;
-import ru.geekbrains.Math.Rect;
-import ru.geekbrains.Sprite.Background;
-import ru.geekbrains.Sprite.ButtonExit;
-import ru.geekbrains.Sprite.ButtonPlay;
-import ru.geekbrains.Sprite.Star;
+import ru.geekbrains.base.Base2DScreen;
+import ru.geekbrains.math.Rect;
+import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.ButtonExit;
+import ru.geekbrains.sprite.ButtonPlay;
+import ru.geekbrains.sprite.Star;
 
 public class MenuScreen extends Base2DScreen {
 
@@ -29,6 +30,8 @@ public class MenuScreen extends Base2DScreen {
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
 
+    private Music music;
+
     public MenuScreen(Game game) {
         this.game = game;
     }
@@ -37,6 +40,9 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public void show() {
         super.show();
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/musicMenu.mp3"));
+        music.setLooping(true);
+        music.play();
         backImg = new Texture("textures/bg.png");
         background = new Background(new TextureRegion(backImg));
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
@@ -91,6 +97,7 @@ public class MenuScreen extends Base2DScreen {
         backImg.dispose();
         atlas.dispose();
         super.dispose();
+        music.dispose();
     }
 
     @Override

@@ -1,10 +1,10 @@
-package ru.geekbrains.Sprite;
+package ru.geekbrains.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import ru.geekbrains.Base.ScaledButton;
-import ru.geekbrains.Math.Rect;
+import ru.geekbrains.base.ScaledButton;
+import ru.geekbrains.math.Rect;
 
 public class ButtonExit extends ScaledButton {
 

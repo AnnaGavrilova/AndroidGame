@@ -1,4 +1,4 @@
-package ru.geekbrains.Base;
+package ru.geekbrains.base;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.Math.MatrixUtils;
-import ru.geekbrains.Math.Rect;
+import ru.geekbrains.math.MatrixUtils;
+import ru.geekbrains.math.Rect;
 
 public abstract class Base2DScreen implements Screen, InputProcessor {
 
