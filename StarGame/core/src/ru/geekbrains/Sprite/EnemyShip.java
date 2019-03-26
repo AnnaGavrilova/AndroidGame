@@ -1,73 +1,73 @@
 package ru.geekbrains.sprite;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.base.Sprite;
+
 import ru.geekbrains.math.Rect;
-import ru.geekbrains.math.Rnd;
+import ru.geekbrains.pool.BulletPool;
 
-public class EnemyShip extends Sprite {
+public class EnemyShip extends Ship {
 
-    private Rect worldBounds;
-    private int classShip; // тип корабля
-    private Vector2 v;  // скорость корабля
-    private int countLife; //количество жизней
-    private int damage; //урон
-    private Vector2 vBullet; //скорость пули
+    private enum State {DESCENT, FIGHT}
 
-    public EnemyShip() {
-        this.regions = new TextureRegion[2];
-        this.v = new Vector2();
-        this.vBullet = new Vector2();
-    }
+    private Vector2 v0 = new Vector2();
+    private Vector2 descentV = new Vector2(0, -0.15f);
+    private State state;
 
-    public void set(
-            TextureAtlas atlas,
-            int classShip,
-            Rect worldBounds,
-            Vector2 v0,  // скорость корабля
-            float hight, // размер корабля
-            int countLife, // количество жизней
-            int damage,
-            Vector2 vBul
-    ) {
-        switch (classShip) {
-            case 1:
-                this.regions[0] = atlas.findRegion("enemy0");
-                break;
-            case 2:
-                this.regions[0] = atlas.findRegion("enemy1");
-                break;
-            case 3:
-                this.regions[0] = atlas.findRegion("enemy2");
-                break;
-        }
+
+    public EnemyShip(BulletPool bulletPool, Sound shootSound, Rect worldBounds) {
         this.worldBounds = worldBounds;
-        this.v.set(v0);
-        setHeightProportion(hight);
-        this.countLife = countLife;
-        this.damage = damage;
-        this.vBullet.set(vBul);
+        this.bulletPool = bulletPool;
+        this.shootSound = shootSound;
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
-        pos.mulAdd(v, delta);
+        switch (state) {
+            case DESCENT:
+                if (getTop() <= worldBounds.getTop()) {
+                    v.set(v0);
+                    state = state.FIGHT;
+                }
+                break;
+            case FIGHT:
+                reloadTimer += delta;
+                if (reloadTimer >= reloadInterval) {
+                    reloadTimer = 0;
+                    shoot();
+                }
+                if (getBottom() <= worldBounds.getBottom()) {
+                    this.destroy();
+                }
+                break;
+        }
     }
 
-    @Override
-    public void draw(SpriteBatch batch) {
-        super.draw(batch);
-    }
-
-    @Override
-    public void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
-        setTop(worldBounds.getTop() + 0.05f);
-        setLeft(Rnd.nextFloat(-1, 1));
+    public void set(
+            TextureRegion[] regions,
+            Vector2 v0,
+            TextureRegion bulletRegion,
+            float bulletHeight,
+            float bulletVY,
+            int damage,
+            float reloadInterval,
+            float height,
+            int hp
+    ) {
+        this.regions = regions;
+        this.v0.set(v0);
+        this.bulletRegion = bulletRegion;
+        this.bulletHeight = bulletHeight;
+        this.bulletV.set(0, bulletVY);
+        this.damage = damage;
+        this.reloadInterval = reloadInterval;
+        this.hp = hp;
+        setHeightProportion(height);
+        reloadTimer = reloadInterval;
+        this.v.set(descentV);
+        state = state.DESCENT;
     }
 }
